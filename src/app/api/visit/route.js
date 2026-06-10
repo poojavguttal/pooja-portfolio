@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req) {
   // Get visitor IP
   const forwarded = req.headers.get('x-forwarded-for')
