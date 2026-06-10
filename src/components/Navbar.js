@@ -21,7 +21,7 @@ export default function Navbar() {
         <img src="/pg-logo.png" alt="PG" style={{ height: '48px', width: 'auto' }} />
 
         <div className="nav-links">
-          {['About', 'Experience', 'Projects', 'Research', 'Achievements', 'Contact'].map((item) => (
+          {['About', 'Experience', 'Projects', 'Research', 'Achievements', 'Community', 'Contact'].map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`} style={{
               fontSize: '13px', color: '#6b7280', textDecoration: 'none', letterSpacing: '0.5px',
             }}
@@ -53,7 +53,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div className={`nav-mobile-menu ${menuOpen ? 'open' : ''}`}>
-        {['About', 'Experience', 'Projects', 'Research', 'Achievements', 'Contact'].map((item) => (
+        {['About', 'Experience', 'Projects', 'Research', 'Achievements', 'Community', 'Contact'].map((item) => (
           <a key={item} href={`#${item.toLowerCase()}`}
             onClick={() => setMenuOpen(false)}
             style={{ fontSize: '14px', color: '#6b7280', textDecoration: 'none' }}

@@ -76,7 +76,7 @@ export default function Experience() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {experiences.map((exp, i) => (
-          <div key={i} style={{
+          <div key={i} className="hover-card" style={{
             background: 'white',
             borderRadius: '16px',
             padding: '28px 32px',

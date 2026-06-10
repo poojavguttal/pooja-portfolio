@@ -56,7 +56,7 @@ export default function Projects() {
       </h2>
       <div className="projects-grid">
         {projects.map((project, i) => (
-          <div key={i} style={{
+          <div key={i} className="hover-card" style={{
             background: 'white', borderRadius: '16px', padding: '24px',
             border: '0.5px solid #fce7f3', display: 'flex', flexDirection: 'column', gap: '10px',
           }}>

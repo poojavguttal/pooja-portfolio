@@ -9,6 +9,10 @@ import Research from '../components/Research'
 import Achievements from '../components/Achievements'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
+import Community from '../components/Community'
+import VoiceAssistant from '../components/VoiceAssistant'
+import VisitorGreeting from '../components/VisitorGreeting'
+import SoundEffects from '../components/SoundEffects'
 
 export default function Home() {
   return (
@@ -20,9 +24,13 @@ export default function Home() {
       <Experience />
       <Projects />
       <Research />
-      {/* <Achievements /> */}
+      <Achievements />
+      <Community />
       <Contact />
       <Footer />
+      <VoiceAssistant />
+      <VisitorGreeting />
+      <SoundEffects />
     </main>
   )
 }

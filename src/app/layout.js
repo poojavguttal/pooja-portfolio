@@ -1,4 +1,5 @@
 import './globals.css'
+import PostHogProvider from '../components/PostHogProvider'
 
 export const metadata = {
   title: 'Pooja Guttal — Software Engineer & AI Engineer',
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PostHogProvider />
+        {children}
+      </body>
     </html>
   )
 }

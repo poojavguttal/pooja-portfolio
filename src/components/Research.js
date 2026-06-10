@@ -13,7 +13,7 @@ const papers = [
     title: 'Where do LLMs Fall Short in CBT-Guided Affective Reasoning?',
     // authors: 'Pooja Guttal et al.',
     venue: 'ACII · Under Review',
-    link: '#',
+    link: 'https://drive.google.com/file/d/1E6G2K81H3Q12_Q90ExIva4Lx3U1YIe95/view?usp=sharing',
     readme: '#',
     award: '🏆 Best MS-Led Research Award, CSEE 2026',
   },
@@ -21,7 +21,7 @@ const papers = [
     title: 'Controlling Hallucinations in LLMs for Genre-Specific Storytelling',
     // authors: 'Pooja Guttal',
     // venue: 'November 2024',
-    link: '#',
+    link: 'https://drive.google.com/file/d/1MKBgnG6cDYgqP2zVJDLY8DN0DdCC45kR/view?usp=sharing',
     readme: '#',
     award: null,
   },
@@ -39,7 +39,7 @@ export default function Research() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {papers.map((paper, i) => (
-          <div key={i} style={{
+          <div key={i} className="hover-card" style={{
             background: 'white', borderRadius: '12px', padding: '20px 24px',
             border: '0.5px solid #fce7f3',
             borderLeftWidth: '4px', borderLeftColor: '#e11d48', borderLeftStyle: 'solid',
