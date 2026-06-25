@@ -1,6 +1,6 @@
 'use client'
+import { useState, useRef } from 'react'
 import FadeIn from './FadeIn'
-
 
 const experiences = [
   {
@@ -64,7 +64,70 @@ const experiences = [
   },
 ]
 
+function ExpCard({ exp }) {
+  return (
+    <div
+      className="rounded-2xl p-6 h-full"
+      style={{ border: '1px solid rgba(12,12,12,0.12)', background: '#FAFAFA' }}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
+        <div>
+          <h3
+            className="font-semibold uppercase tracking-tight leading-tight"
+            style={{ fontSize: '1rem', color: '#0C0C0C' }}
+          >
+            {exp.role}
+          </h3>
+          <p
+            className="font-semibold mt-0.5"
+            style={{ fontSize: '0.85rem', color: '#0C0C0C', opacity: 0.65 }}
+          >
+            {exp.company}
+            <span className="font-light mx-2" style={{ opacity: 0.4 }}>·</span>
+            <span className="font-light" style={{ opacity: 0.85 }}>{exp.location}</span>
+          </p>
+        </div>
+        <span
+          className="font-light uppercase tracking-widest flex-shrink-0"
+          style={{ fontSize: '0.62rem', color: '#0C0C0C', opacity: 0.75 }}
+        >
+          {exp.period}
+        </span>
+      </div>
+      <ul className="flex flex-col gap-2">
+        {exp.bullets.map((b, j) => (
+          <li key={j} className="flex gap-3 items-start">
+            <span className="flex-shrink-0 mt-[7px] w-1 h-1 rounded-full" style={{ background: '#0C0C0C', opacity: 0.35 }} />
+            <p
+              className="font-light leading-relaxed"
+              style={{ fontSize: '0.82rem', color: '#0C0C0C', opacity: 0.65 }}
+            >
+              {b}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function Experience() {
+  const [active, setActive] = useState(0)
+  const sliderRef = useRef(null)
+
+  function onScroll() {
+    const el = sliderRef.current
+    if (!el) return
+    setActive(Math.round(el.scrollLeft / el.clientWidth))
+  }
+
+  function goTo(i) {
+    const el = sliderRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+    setActive(i)
+  }
+
   return (
     <section
       id="experience"
@@ -80,10 +143,41 @@ export default function Experience() {
         </h2>
       </FadeIn>
 
-      <div className="max-w-4xl mx-auto relative">
-        {/* Vertical timeline line */}
+      {/* Mobile carousel */}
+      <div className="sm:hidden">
         <div
-          className="absolute left-[7px] top-2 bottom-2 w-px hidden sm:block"
+          ref={sliderRef}
+          onScroll={onScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+        >
+          {experiences.map((exp, i) => (
+            <div key={i} className="min-w-full snap-center px-1">
+              <ExpCard exp={exp} />
+            </div>
+          ))}
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex justify-center items-center gap-2 mt-6">
+          {experiences.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === active ? '20px' : '8px',
+                height: '8px',
+                background: i === active ? '#0C0C0C' : 'rgba(12,12,12,0.2)',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop timeline */}
+      <div className="hidden sm:block max-w-4xl mx-auto relative">
+        <div
+          className="absolute left-[7px] top-2 bottom-2 w-px"
           style={{ background: 'linear-gradient(180deg, #0C0C0C 0%, rgba(12,12,12,0.1) 100%)' }}
         />
 
@@ -91,18 +185,14 @@ export default function Experience() {
           {experiences.map((exp, i) => (
             <FadeIn key={i} delay={i * 0.1} y={30}>
               <div className="flex gap-6 sm:gap-10">
-
-                {/* Timeline dot */}
-                <div className="hidden sm:flex flex-col items-center flex-shrink-0 mt-1.5">
+                <div className="flex flex-col items-center flex-shrink-0 mt-1.5">
                   <div
                     className="w-[15px] h-[15px] rounded-full border-2 flex-shrink-0"
                     style={{ background: '#0C0C0C', borderColor: '#0C0C0C' }}
                   />
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 min-w-0 pb-2">
-                  {/* Header row */}
                   <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                     <div>
                       <h3
@@ -128,7 +218,6 @@ export default function Experience() {
                     </span>
                   </div>
 
-                  {/* Bullet points */}
                   <ul className="flex flex-col gap-2 mt-3">
                     {exp.bullets.map((b, j) => (
                       <li key={j} className="flex gap-3 items-start">
