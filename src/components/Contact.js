@@ -1,78 +1,60 @@
-import { FiLinkedin, FiGithub, FiMail } from 'react-icons/fi'
+'use client'
+import FadeIn from './FadeIn'
+import { FiMail, FiLinkedin, FiGithub } from 'react-icons/fi'
+
+const links = [
+  { label: 'Email',    href: 'mailto:poojaguttal.md@gmail.com',    icon: FiMail     },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/poojaguttal', icon: FiLinkedin },
+  { label: 'GitHub',   href: 'https://github.com/poojavguttal',     icon: FiGithub   },
+]
 
 export default function Contact() {
   return (
-    <section id="contact" style={{
-      padding: '80px 48px',
-      background: '#fff0f3',
-      textAlign: 'center',
-    }}>
-      <h2 style={{
-        fontFamily: 'Cormorant Garamond, serif',
-        fontSize: '40px',
-        fontWeight: '300',
-        marginBottom: '16px',
-      }}>
-        <span style={{ color: '#e11d48', fontStyle: 'italic' }}>Let's Talk</span>
-      </h2>
+    <section
+      id="contact"
+      className="px-5 sm:px-8 md:px-10 py-16 sm:py-20 text-center"
+      style={{ background: '#0C0C0C' }}
+    >
+      <FadeIn delay={0} y={40}>
+        <h2
+          className="hero-heading font-black uppercase leading-none tracking-tight mb-8 sm:mb-10"
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+        >
+          Let&apos;s connect
+        </h2>
+      </FadeIn>
 
-      <p style={{
-        fontSize: '15px',
-        color: '#6b7280',
-        maxWidth: '480px',
-        margin: '0 auto 32px',
-        lineHeight: '1.8',
-      }}>
-        I'm always excited to connect with people building innovative solutions and creating meaningful impact through technology.
-      </p>
+      <FadeIn delay={0.2} y={20}>
+        <p
+          className="font-light uppercase tracking-wide mx-auto mb-10 sm:mb-12"
+          style={{ color: '#D7E2EA', opacity: 0.55, fontSize: 'clamp(0.85rem, 1.6vw, 1.25rem)', maxWidth: '480px' }}
+        >
+          Open to new opportunities, research collaborations, and building something amazing together.
+        </p>
+      </FadeIn>
 
-      <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="mailto:poojaguttal.md@gmail.com" style={{
-          border: '1px solid #e11d48',
-          color: '#e11d48',
-          background: 'transparent',
-          padding: '14px 28px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          fontSize: '13px',
-        }}>
-          <FiMail size={16} />
-          Email
-        </a>
-        <a href="https://linkedin.com/in/poojaguttal" target="_blank" rel="noreferrer" style={{
-          border: '1px solid #e11d48',
-          color: '#e11d48',
-          background: 'transparent',
-          padding: '14px 28px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          fontSize: '13px',
-        }}>
-          <FiLinkedin size={16} />
-          LinkedIn
-        </a>
-        <a href="https://github.com/poojavguttal" target="_blank" rel="noreferrer" style={{
-          border: '1px solid #e11d48',
-          color: '#e11d48',
-          background: 'transparent',
-          padding: '14px 28px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          fontSize: '13px',
-        }}>
-          <FiGithub size={16} />
-          GitHub
-        </a>
-      </div>
+      <FadeIn delay={0.35} y={20}>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {links.map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noreferrer' : undefined}
+              className="flex items-center gap-2.5 rounded-full px-7 py-3 text-sm font-medium uppercase tracking-widest transition-all duration-200 hover:bg-[#D7E2EA] hover:text-[#0C0C0C]"
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(215,226,234,0.35)',
+                color: '#D7E2EA',
+                textDecoration: 'none',
+              }}
+            >
+              <Icon size={15} />
+              {label}
+            </a>
+          ))}
+        </div>
+      </FadeIn>
     </section>
   )
 }

@@ -1,124 +1,69 @@
+'use client'
+import { motion } from 'framer-motion'
+import FadeIn from './FadeIn'
+
 const achievements = [
-  {
-    image: '/achievements/1.png', number: '01',
-    title: 'Guest Speaker — Generative AI',
-    sub: 'SVIT Skill Enhancement Day · Jan 2024',
-    span: 2, bg: '#ffffff',
-  },
-  {
-    image: '/achievements/2.png', number: '02',
-    title: 'State Level Tech Co-ordinator',
-    sub: 'State-level technical events',
-    span: 1, bg: '#ffffff',
-  },
-  {
-    image: '/achievements/3.png', number: '03',
-    title: 'Volunteer Co-ordinator',
-    sub: 'Avisa NGO',
-    span: 1, bg: '#ffffff',
-  },
-  {
-    image: '/achievements/4.png', number: '04',
-    title: 'College Website Developer',
-    sub: 'SVIT',
-    span: 1, bg: '#ffffff',
-  },
-  {
-    image: '/achievements/5.png', number: '05',
-    title: 'Department Distinction',
-    sub: 'SVIT · Academic & technical excellence',
-    span: 2, bg: '#ffffff',
-  },
-  {
-    image: '/achievements/6.svg', number: '06',
-    title: "UMBC Hack '25",
-    sub: 'University of Maryland',
-    span: 1, bg: '#ffffff',
-  },
+  { number: '01', title: "UMBC Hack '25",                  sub: 'University of Maryland'      },
+  { number: '02', title: 'Guest Speaker — Generative AI',   sub: 'SVIT · Jan 2024'           },
+  { number: '03', title: 'State-Level Tech Co-ordinator',   sub: 'State-level events'         },
+  { number: '04', title: 'College Website Developer',       sub: 'SVIT'                       },
+  { number: '05', title: 'Department Distinction',          sub: 'SVIT · Academic excellence' },
 ]
 
 export default function Achievements() {
   return (
-    <section id="achievements" style={{ padding: '80px 48px', background: '#fff9f9' }}>
-      <h2 style={{
-        fontFamily: 'Cormorant Garamond, serif', fontSize: '40px',
-        fontWeight: '300', marginBottom: '48px',
-      }}>
-        <span style={{ color: '#e11d48', fontStyle: 'italic' }}>Achievements & Leadership</span>
-      </h2>
+    <section
+      id="achievements"
+      className="px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]"
+      style={{ background: '#FFFFFF' }}
+    >
+      <FadeIn>
+        <h2
+          className="font-black uppercase leading-none tracking-tight text-center mb-14 sm:mb-16"
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#0C0C0C' }}
+        >
+          Highlights
+        </h2>
+      </FadeIn>
 
-      <div className="bento-grid" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gridAutoRows: '240px',
-        gap: '16px',
-      }}>
+      <div className="max-w-4xl mx-auto">
         {achievements.map((a, i) => (
-          <div
+          <motion.div
             key={i}
-            className={`hover-card bento-tile${a.span === 2 ? ' bento-tile--wide' : ''}`}
+            className="group flex items-center justify-between gap-6 py-6 sm:py-8 cursor-default"
             style={{
-              gridColumn: `span ${a.span}`,
-              background: a.bg,
-              borderRadius: '20px',
-              overflow: 'hidden',
-              border: '1px solid #fce7f3',
-              boxShadow: '0 4px 24px rgba(225,29,72,0.10)',
-              display: 'flex',
-              flexDirection: a.span === 2 ? 'row' : 'column',
-              alignItems: 'center',
-              padding: a.span === 2 ? '0' : '24px 20px',
-              position: 'relative',
+              borderBottom: '1px solid rgba(12,12,12,0.10)',
+              borderTop: i === 0 ? '1px solid rgba(12,12,12,0.10)' : 'none',
             }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: false, margin: '-40px' }}
           >
-            {a.span === 2 ? (
-              // Wide tile: image left, text right
-              <>
-                <div style={{
-                  width: '42%', height: '100%', flexShrink: 0,
-                  background: '#ffffff',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  padding: '20px', borderRight: '1px solid #fce7f3',
-                }}>
-                  <img src={a.image} alt={a.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </div>
-                <div style={{ flex: 1, padding: '24px 20px' }}>
-                  <span style={{
-                    fontSize: '10px', color: '#fca5a5',
-                    letterSpacing: '2px', textTransform: 'uppercase',
-                  }}>{a.number}</span>
-                  <h3 style={{
-                    fontSize: '22px', fontWeight: '600', margin: '6px 0 8px',
-                    color: '#1c1c1c', lineHeight: '1.3',
-                    fontFamily: 'Cormorant Garamond, serif',
-                  }}>{a.title}</h3>
-                  <p style={{ fontSize: '14px', color: '#6b7280', margin: 0, lineHeight: '1.6' }}>
-                    {a.sub}
-                  </p>
-                </div>
-              </>
-            ) : (
-              // Narrow tile: image top, text bottom
-              <>
-                <span style={{
-                  position: 'absolute', top: '12px', right: '14px',
-                  fontSize: '11px', color: '#fca5a5', letterSpacing: '2px',
-                }}>{a.number}</span>
-                <img src={a.image} alt={a.title}
-                  style={{ width: '75%', height: '50%', objectFit: 'contain', marginBottom: '14px' }} />
-                <h3 style={{
-                  fontSize: '16px', fontWeight: '600', margin: '0 0 4px',
-                  color: '#1c1c1c', lineHeight: '1.3', textAlign: 'center',
-                  fontFamily: 'Cormorant Garamond, serif',
-                }}>{a.title}</h3>
-                <p style={{
-                  fontSize: '12px', color: '#6b7280',
-                  margin: 0, lineHeight: '1.5', textAlign: 'center',
-                }}>{a.sub}</p>
-              </>
-            )}
-          </div>
+            {/* Number */}
+            <span
+              className="font-black flex-shrink-0 leading-none transition-all duration-300 group-hover:opacity-100"
+              style={{ fontSize: 'clamp(1rem, 2vw, 1.4rem)', color: '#0C0C0C', opacity: 0.15 }}
+            >
+              {a.number}
+            </span>
+
+            {/* Title */}
+            <p
+              className="flex-1 font-bold uppercase tracking-tight transition-all duration-300 group-hover:tracking-widest"
+              style={{ fontSize: 'clamp(0.95rem, 2vw, 1.3rem)', color: '#0C0C0C' }}
+            >
+              {a.title}
+            </p>
+
+            {/* Sub */}
+            <span
+              className="flex-shrink-0 font-light uppercase tracking-widest hidden sm:block transition-opacity duration-300 group-hover:opacity-100"
+              style={{ fontSize: '0.65rem', color: '#0C0C0C', opacity: 0.55 }}
+            >
+              {a.sub}
+            </span>
+          </motion.div>
         ))}
       </div>
     </section>

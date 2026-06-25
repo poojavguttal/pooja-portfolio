@@ -7,16 +7,14 @@ import Experience from '../components/Experience'
 import Projects from '../components/Projects'
 import Research from '../components/Research'
 import Achievements from '../components/Achievements'
+import Community from '../components/Community'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
-import Community from '../components/Community'
-import VoiceAssistant from '../components/VoiceAssistant'
-import VisitorGreeting from '../components/VisitorGreeting'
-import SoundEffects from '../components/SoundEffects'
+import Review from '../components/Review'
 
 export default function Home() {
   return (
-    <main>
+    <div style={{ overflowX: 'clip', background: '#0C0C0C' }}>
       <Navbar />
       <Hero />
       <About />
@@ -28,9 +26,7 @@ export default function Home() {
       <Community />
       <Contact />
       <Footer />
-      <VoiceAssistant />
-      <VisitorGreeting />
-      <SoundEffects />
-    </main>
+      <Review />
+    </div>
   )
 }

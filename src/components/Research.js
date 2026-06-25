@@ -1,80 +1,176 @@
-import { FiGithub, FiFileText } from 'react-icons/fi'
+'use client'
+import { motion } from 'framer-motion'
+import FadeIn from './FadeIn'
+
+const termColors = {
+  'ACII 2026':        '#A78BFA',
+  'arXiv':            '#F59E0B',
+  'First Author':     '#34D399',
+  'Best MS Research': '#FBBF24',
+}
+
+function HL({ text }) {
+  if (!text) return null
+  let parts = [{ text, hl: false }]
+  Object.entries(termColors).forEach(([term, color]) => {
+    parts = parts.flatMap(p => {
+      if (p.hl) return [p]
+      const segs = p.text.split(term)
+      if (segs.length === 1) return [p]
+      return segs.flatMap((s, i) => {
+        const out = []
+        if (s) out.push({ text: s, hl: false })
+        if (i < segs.length - 1) out.push({ text: term, hl: true, color })
+        return out
+      })
+    })
+  })
+  return <>{parts.map((p, i) => p.hl ? <span key={i} style={{ color: p.color, fontWeight: 600 }}>{p.text}</span> : p.text)}</>
+}
 
 const papers = [
   {
-    title: 'Structure-Aware Chunking for Tabular Data in RAG',
-    authors: 'Pooja Guttal · First author',
-    // venue: 'arXiv:2605.00318 · 202',
-    link: 'https://arxiv.org/abs/2605.00318',
-    readme: '#',
-    award: null,
-  },
-  {
+    number: '01',
     title: 'Where do LLMs Fall Short in CBT-Guided Affective Reasoning?',
-    // authors: 'Pooja Guttal et al.',
-    venue: 'ACII · Under Review',
+    venue: 'ACII 2026 — Accepted as Full Paper',
+    award: 'Best MS Research, CSEE 2026',
+    authors: 'Pooja Guttal',
     link: 'https://drive.google.com/file/d/1E6G2K81H3Q12_Q90ExIva4Lx3U1YIe95/view?usp=sharing',
-    readme: '#',
-    award: '🏆 Best MS-Led Research Award, CSEE 2026',
+    tag: 'Accepted',
   },
   {
-    title: 'Controlling Hallucinations in LLMs for Genre-Specific Storytelling',
-    // authors: 'Pooja Guttal',
-    // venue: 'November 2024',
-    link: 'https://drive.google.com/file/d/1MKBgnG6cDYgqP2zVJDLY8DN0DdCC45kR/view?usp=sharing',
-    readme: '#',
+    number: '02',
+    title: 'Structure-Aware Chunking for Tabular Data in RAG',
+    venue: 'arXiv · 2025',
     award: null,
+    authors: 'Pooja Guttal · First Author',
+    link: 'https://arxiv.org/abs/2605.00318',
+    tag: 'Published',
+  },
+  {
+    number: '03',
+    title: 'Controlling Hallucinations in LLMs for Genre-Specific Storytelling',
+    venue: null,
+    award: null,
+    authors: 'Pooja Guttal',
+    link: 'https://drive.google.com/file/d/1MKBgnG6cDYgqP2zVJDLY8DN0DdCC45kR/view?usp=sharing',
+    tag: 'Preprint',
   },
 ]
 
+const tagColors = {
+  Accepted:  { bg: '#7621B0', color: '#fff' },
+  Published: { bg: '#0C7A45', color: '#fff' },
+  Preprint:  { bg: 'rgba(215,226,234,0.15)', color: '#D7E2EA' },
+}
+
 export default function Research() {
   return (
-    <section id="research" style={{ padding: '80px 48px', background: '#fff0f3' }}>
-      <h2 style={{
-        fontFamily: 'Cormorant Garamond, serif',
-        fontSize: '40px', fontWeight: '300', marginBottom: '48px',
-      }}>
-        <span style={{ color: '#e11d48', fontStyle: 'italic' }}>Research & Publications</span>
-      </h2>
+    <section
+      id="research"
+      className="px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      style={{ background: '#0C0C0C' }}
+    >
+      <FadeIn>
+        <h2
+          className="hero-heading font-black uppercase leading-none tracking-tight text-center mb-14 sm:mb-16"
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+        >
+          Research
+        </h2>
+      </FadeIn>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {papers.map((paper, i) => (
-          <div key={i} className="hover-card" style={{
-            background: 'white', borderRadius: '12px', padding: '20px 24px',
-            border: '0.5px solid #fce7f3',
-            borderLeftWidth: '4px', borderLeftColor: '#e11d48', borderLeftStyle: 'solid',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
-              <div style={{ flex: 1 }}>
-                {paper.award && (
-                  <span style={{
-                    fontSize: '10px', color: '#92400e', background: '#fef3c7',
-                    border: '1px solid #fcd34d', padding: '4px 12px', borderRadius: '20px',
-                    display: 'inline-block', marginBottom: '8px', fontWeight: '600', letterSpacing: '0.2px',
-                  }}>
-                    {paper.award}
-                  </span>
-                )}
-                <h3 style={{ fontSize: '15px', fontWeight: '500', margin: '0 0 4px' }}>{paper.title}</h3>
-                <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 2px' }}>{paper.authors}</p>
-                <p style={{ fontSize: '11px', color: '#9ca3af', margin: 0 }}>{paper.venue}</p>
-              </div>
-              <div style={{ display: 'flex', gap: '8px', flexShrink: 0, alignItems: 'center' }}>
-                <a
-                  href={paper.link !== '#' ? paper.link : undefined}
-                  target="_blank" rel="noreferrer"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '5px',
-                    fontSize: '12px', fontWeight: '600', color: 'white',
-                    background: '#e11d48', padding: '7px 12px', borderRadius: '8px',
-                    textDecoration: 'none', whiteSpace: 'nowrap',
-                  }}
+      <div className="max-w-4xl mx-auto flex flex-col gap-4">
+        {papers.map((p, i) => (
+          <motion.a
+            key={i}
+            href={p.link}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex flex-col gap-4 p-7 sm:p-8 rounded-3xl"
+            style={{
+              background: 'rgba(215,226,234,0.05)',
+              border: '1px solid rgba(215,226,234,0.15)',
+              textDecoration: 'none',
+            }}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.55, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+            viewport={{ once: false, margin: '-60px' }}
+            whileHover={{
+              background: 'rgba(215,226,234,0.09)',
+              borderColor: 'rgba(215,226,234,0.4)',
+              x: 6,
+              transition: { duration: 0.2 },
+            }}
+          >
+            {/* Top row */}
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <motion.span
+                  className="font-black leading-none"
+                  style={{ fontSize: 'clamp(1.2rem, 2vw, 1.6rem)', color: '#D7E2EA', opacity: 0.45 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 0.45 }}
+                  transition={{ duration: 0.4, delay: i * 0.15 + 0.3 }}
+                  viewport={{ once: false }}
                 >
-                  <FiFileText size={13} /> Read
-                </a>
+                  {p.number}
+                </motion.span>
+                <motion.span
+                  className="rounded-full px-3 py-1 text-xs font-medium uppercase tracking-widest"
+                  style={{ background: tagColors[p.tag].bg, color: tagColors[p.tag].color }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: i * 0.15 + 0.35, ease: 'backOut' }}
+                  viewport={{ once: false }}
+                >
+                  {p.tag}
+                </motion.span>
+                {p.award && (
+                  <motion.span
+                    className="font-light uppercase tracking-widest hidden sm:inline"
+                    style={{ fontSize: '0.6rem', color: '#D7E2EA', opacity: 0.65 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 0.65 }}
+                    transition={{ duration: 0.4, delay: i * 0.15 + 0.4 }}
+                    viewport={{ once: false }}
+                  >
+                    <HL text={p.award} />
+                  </motion.span>
+                )}
               </div>
+              <span
+                className="flex-shrink-0 text-base transition-transform duration-200 group-hover:translate-x-1"
+                style={{ color: '#D7E2EA', opacity: 0.6 }}
+              >
+                →
+              </span>
             </div>
-          </div>
+
+            {/* Title */}
+            <p
+              className="font-medium leading-snug"
+              style={{ fontSize: 'clamp(0.95rem, 1.7vw, 1.2rem)', color: '#D7E2EA' }}
+            >
+              {p.title}
+            </p>
+
+            {/* Meta */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <span className="font-light" style={{ fontSize: '0.78rem', color: '#D7E2EA', opacity: 0.7 }}>
+                <HL text={p.authors} />
+              </span>
+              {p.venue && (
+                <>
+                  <span style={{ color: '#D7E2EA', opacity: 0.4, fontSize: '0.7rem' }}>·</span>
+                  <span className="font-light" style={{ fontSize: '0.78rem', color: '#D7E2EA', opacity: 0.65 }}>
+                    <HL text={p.venue} />
+                  </span>
+                </>
+              )}
+            </div>
+          </motion.a>
         ))}
       </div>
     </section>

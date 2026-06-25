@@ -1,158 +1,152 @@
+'use client'
+import FadeIn from './FadeIn'
+
+
 const experiences = [
   {
-    title: 'Python & AI Engineer (Co-op Intern)',
+    role: 'Python & AI Engineer',
     company: 'Altumatim',
-    location: 'Remote, United States',
     period: 'Feb 2026 – May 2026',
-    type: 'AI Engineer',
-    skills: [
-      'Python', 'LLM Pipelines', 'RAG', 'LangChain', 'GCP', 'Vertex AI', 'Gemini', 'Claude Code', 'Github Copilot', 'GitBucket'
-    ],
+    location: 'Birmingham, Michigan',
     bullets: [
-      // REPLACE: Add your bullet points here
-      'Engineered and shipped features including production LLM pipelines, RAG systems, and enterprise integrations that enhanced the efficiency of legal AI workflows.'
+      'Engineered a production-grade LLM pipeline on Vertex AI (Gemini 2.5 Flash) for legal filings, enabling 10-stage classification and entity extraction, replacing manual document review at scale.',
+      'Designed a structure-aware chunking algorithm for tabular documents, outperforming LangChain recursive splitter by reducing context fragmentation by 35% and achieving 8× faster processing across RAG pipelines — published on arXiv.',
+      'Implemented a speaker detection and transcription pipeline for legal deposition videos, achieving 22× real-time processing and enabling speaker-specific evidence retrieval for legal investigation workflows.',
+      'Built multi-source ingestion pipelines (Enterprise Slack integration + video processing), implementing data extraction and structuring workflows to power RAG pipelines and enable new features in a legal AI system.',
     ],
   },
   {
-    title: 'Research Assistant',
+    role: 'Research Assistant',
     company: 'UMBC',
-    location: 'Baltimore, MD',
     period: 'May 2025 – May 2026',
-    type: 'Research',
-    skills: [
-      'Python', 'SQL', 'Tableau', 'Data Analysis', 'Machine Learning', 'NLP', 'Deep Learning'
-    ],
+    location: 'Baltimore, MD',
     bullets: [
-      'Transformed student and staff institutional data into Tableau dashboards, delivering insights that supported academic planning and workforce decisions. Built SQL stored procedures and views to streamline data access and reporting workflows.'
+      'Processed 50,000+ records across 10 years, using Pandas, NumPy, and SQL to analyze student course-switching behavior patterns.',
+      'Built ETL pipeline to clean and normalize multi-schema academic datasets, reducing data inconsistencies by 85% through validation.',
+      'Designed Tableau dashboards and analytical reports to visualize enrollment trends, course transitions, and graduation outcomes, enabling data-driven insights for faculty and academic advisors.',
+      'Conducted cohort-based and statistical analysis to identify course pathways correlated with 23% higher graduation rates, supporting faster data-driven advising decisions.',
+      'Collaborated with stakeholders to translate analytical findings into actionable insights for retention and academic planning initiatives.',
     ],
   },
   {
-    title: 'Software Engineer',
+    role: 'Software Engineer',
     company: 'Persistent Systems',
-    location: 'Bangalore, India',
     period: 'Aug 2022 – Aug 2024',
-    type: 'SWE',
-    skills: [
-      'React.js', 'JavaScript (ES6+)', 'TypeScript',
-      'Java', 'Spring Boot', 'REST APIs', 'Microservices',
-      'JWT', 'PostgreSQL', 'MySQL', 'Git', 'Agile',
-    ],
+    location: 'Bangalore, India',
     bullets: [
-      // REPLACE: Add your bullet points here
-      'Shipped full-stack features for enterprise insurance platform serving millions of health plan members, and built internal automation tools for the Learning & Development team, reducing manual effort by 75%.'
+      'Led development of a JavaScript (ES6+) browser automation system for the internal Learning & Development team, generating quizzes from multimedia content, reducing manual effort by 75%.',
+      'Re-engineered legacy frontend into responsive React/Redux SPAs, reducing page load time by 40% and improving UI responsiveness and maintainability for an enterprise insurance portal.',
+      'Developed scalable backend microservices using Spring Boot with JWT-secured REST APIs, implementing CI/CD pipelines for automated build, testing, and deployment, enabling secure data access across distributed services.',
+      'Optimized SQL queries on high-traffic endpoints, reducing system downtime by 30% and improving production SaaS platform reliability, while contributing to Agile code reviews to maintain code quality and performance standards.',
     ],
   },
   {
-    title: 'Software Engineer Intern',
+    role: 'Software Engineer Intern',
     company: 'L2MRail',
-    location: 'Bangalore, India',
     period: 'Sep 2021 – Jan 2022',
-    type: 'SWE',
-    skills: [
-      'Django', 'PostgreSQL', 'Python', 'SQL',
-      'AWS ECS', 'REST APIs', 'MQTT Broker (Async Message Queues)',
-    ],
+    location: 'Bangalore, India',
     bullets: [
-      // REPLACE: Add your bullet points here
-      'Built real-time rail wheel health monitoring infrastructure for Indian Railways (RDSO), processing 20,000+ daily sensor events across safety-critical systems.'
+      'Built full-stack features using HTML, JavaScript, and Django for a rail wheel health monitoring system, ingesting real-time sensor data via MQTT-based pub/sub and persisting streaming data into PostgreSQL for monitoring and analysis.',
+      'Optimized SQL queries, reducing latency by 50% while handling 20,000+ daily sensor events.',
+      'Designed and deployed containerized services on AWS ECS, implementing service discovery and ensuring 99% uptime.',
+    ],
+  },
+  {
+    role: 'Python Intern',
+    company: 'Gowri Enterprises',
+    period: '2021',
+    location: 'Bangalore, India',
+    bullets: [
+      'Developed Python automation scripts to streamline repetitive business workflows and reduce manual processing time.',
+      'Performed data extraction, cleaning, and transformation using Pandas and NumPy to support internal reporting pipelines.',
+      'Built lightweight data utilities and dashboards to consolidate operational metrics and assist business decision-making.',
     ],
   },
 ]
 
 export default function Experience() {
   return (
-    <section id="experience" style={{
-      padding: '80px 48px',
-      background: '#fff0f3',
-    }}>
-      <h2 style={{
-        fontFamily: 'Cormorant Garamond, serif',
-        fontSize: '40px',
-        fontWeight: '300',
-        marginBottom: '48px',
-      }}>
-        <span style={{ color: '#e11d48', fontStyle: 'italic' }}>Work Experience</span>
-      </h2>
+    <section
+      id="experience"
+      className="px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]"
+      style={{ background: '#FFFFFF' }}
+    >
+      <FadeIn>
+        <h2
+          className="font-black uppercase text-center mb-16 sm:mb-20 md:mb-24"
+          style={{ color: '#0C0C0C', fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+        >
+          Experience
+        </h2>
+      </FadeIn>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {experiences.map((exp, i) => (
-          <div key={i} className="hover-card" style={{
-            background: 'white',
-            borderRadius: '16px',
-            padding: '28px 32px',
-            border: '0.5px solid #fce7f3',
-          }}>
-            {/* Header */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              marginBottom: '8px',
-            }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <h3 style={{ fontSize: '17px', fontWeight: '500', margin: 0 }}>
-                    {exp.title}
-                  </h3>
+      <div className="max-w-4xl mx-auto relative">
+        {/* Vertical timeline line */}
+        <div
+          className="absolute left-[7px] top-2 bottom-2 w-px hidden sm:block"
+          style={{ background: 'linear-gradient(180deg, #0C0C0C 0%, rgba(12,12,12,0.1) 100%)' }}
+        />
+
+        <div className="flex flex-col gap-12 sm:gap-14">
+          {experiences.map((exp, i) => (
+            <FadeIn key={i} delay={i * 0.1} y={30}>
+              <div className="flex gap-6 sm:gap-10">
+
+                {/* Timeline dot */}
+                <div className="hidden sm:flex flex-col items-center flex-shrink-0 mt-1.5">
+                  <div
+                    className="w-[15px] h-[15px] rounded-full border-2 flex-shrink-0"
+                    style={{ background: '#0C0C0C', borderColor: '#0C0C0C' }}
+                  />
                 </div>
-                <p style={{ fontSize: '13px', color: '#e11d48', margin: '4px 0 0' }}>
-                  {exp.company} · {exp.location}
-                </p>
-              </div>
-              <span style={{ fontSize: '12px', color: '#6b7280', whiteSpace: 'nowrap' }}>
-                {exp.period}
-              </span>
-            </div>
 
-            {/* Bullets */}
-            <ul style={{
-              margin: '12px 0',
-              paddingLeft: '18px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px',
-            }}>
-              {exp.bullets.map((bullet, j) => (
-                <li key={j} style={{ fontSize: '15px', color: '#4b5563', lineHeight: '1.8' }}>
-                  {bullet}
-                </li>
-              ))}
-            </ul>
+                {/* Content */}
+                <div className="flex-1 min-w-0 pb-2">
+                  {/* Header row */}
+                  <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+                    <div>
+                      <h3
+                        className="font-semibold uppercase tracking-tight leading-tight"
+                        style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)', color: '#0C0C0C' }}
+                      >
+                        {exp.role}
+                      </h3>
+                      <p
+                        className="font-semibold mt-0.5"
+                        style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.05rem)', color: '#0C0C0C', opacity: 0.65 }}
+                      >
+                        {exp.company}
+                        <span className="font-light mx-2" style={{ opacity: 0.4 }}>·</span>
+                        <span className="font-light" style={{ opacity: 0.85 }}>{exp.location}</span>
+                      </p>
+                    </div>
+                    <span
+                      className="font-light uppercase tracking-widest flex-shrink-0 mt-0.5"
+                      style={{ fontSize: 'clamp(0.65rem, 1.1vw, 0.8rem)', color: '#0C0C0C', opacity: 0.75 }}
+                    >
+                      {exp.period}
+                    </span>
+                  </div>
 
-            {/* Skills */}
-            <div style={{
-              borderTop: '0.5px solid #fce7f3',
-              paddingTop: '16px',
-              marginTop: '16px',
-            }}>
-              <p style={{
-                fontSize: '10px',
-                color: '#6b7280',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                marginBottom: '10px',
-              }}>
-                Skills
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {exp.skills.map((skill) => (
-                  <span key={skill} style={{
-                    fontSize: '11px',
-                    color: '#e11d48',
-                    padding: '4px 12px',
-                    borderRadius: '6px',
-                    border: '1px solid #fda4af',
-                    background: 'white',
-                    fontWeight: '500',
-                    letterSpacing: '0.2px',
-                  }}>
-                    {skill}
-                  </span>
-                ))}
+                  {/* Bullet points */}
+                  <ul className="flex flex-col gap-2 mt-3">
+                    {exp.bullets.map((b, j) => (
+                      <li key={j} className="flex gap-3 items-start">
+                        <span className="flex-shrink-0 mt-[7px] w-1 h-1 rounded-full" style={{ background: '#0C0C0C', opacity: 0.35 }} />
+                        <p
+                          className="font-light leading-relaxed"
+                          style={{ fontSize: 'clamp(0.82rem, 1.4vw, 1rem)', color: '#0C0C0C', opacity: 0.65 }}
+                        >
+                          {b}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            </FadeIn>
+          ))}
+        </div>
       </div>
     </section>
   )
