@@ -1,9 +1,15 @@
-# Plain HTML, CSS and JavaScript: no build step, serve the folder as is.
+# Plain HTML, CSS and JavaScript: nothing to compile.
+#
+# This Netlify project was set up for the old Next.js site, so Netlify still
+# expects the output in a ".next" folder. The build just copies the site's
+# files into .next and publishes that. Once the project's framework setting
+# in the Netlify dashboard is changed away from Next.js, this can become
+# publish = "." with no command.
 [build]
-  publish = "."
-  command = "echo 'Static site, nothing to build'"
+  command = "rm -rf .next && mkdir .next && cp -R index.html css js assets .next/"
+  publish = ".next"
 
-# This project used to be a Next.js app, so Netlify still runs its Next.js
-# plugin. There's no Next.js here any more: tell the plugin to skip itself.
+# Netlify's Next.js plugin is still attached to the project; there's no
+# Next.js here any more, so tell it to skip itself.
 [build.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
