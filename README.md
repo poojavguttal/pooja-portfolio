@@ -1,52 +1,52 @@
-# Pooja Guttal — Portfolio
+# Pooja Guttal: portfolio
 
-## 🚀 Quick Start
+A one-page site built as a swipeable deck: Hello → Work → Projects → Research → Community → Connect.
+Plain HTML, CSS and JavaScript. No build step and no dependencies.
 
-```bash
-npm install
-npm run dev
+## Files
+
+```
+pooja-portfolio/
+├── index.html        all content: titles, links, sections
+├── css/styles.css    colours, fonts, layout, highlighter
+├── js/main.js        deck navigation: arrows, keys, swipe, dots, scroll hint
+└── assets/
+    ├── favicon.svg
+    ├── profile.jpg   landing-page photo
+    └── logos/        company, community and contact logos
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+## Run it locally
 
-## 📦 Deploy to Netlify
+1. Open the folder in VS Code.
+2. Install the **Live Server** extension (by Ritwick Dey).
+3. Right-click `index.html` → **Open with Live Server**.
 
-1. Push to GitHub
-2. Connect repo to Netlify
-3. Build command: `npm run build`
-4. Publish directory: `.next`
+You can also double-click `index.html` to open it in a browser.
 
-Or use Netlify CLI:
-```bash
-npm install -g netlify-cli
-netlify deploy --build
-```
+## Before you publish
 
-## 📝 How to Customize
+- **Resume:** the Connect section links to your resume on Google Drive. To change it, edit that link in `index.html`.
+- **Links:** every paper and project link is in `index.html`. Search for `href=` to check them.
 
-### Add Your Photo
-- Place your photo in `/public/photo.jpg`
-- In `src/components/Hero.js`, replace the placeholder div with:
-```jsx
-<img src="/photo.jpg" alt="Pooja Guttal" style={{ width: '280px', height: '380px', borderRadius: '16px', objectFit: 'cover' }} />
-```
+## Editing
 
-### Add Your Video
-- In `src/components/About.js`, uncomment the YouTube or video option
-- Replace `YOUR_VIDEO_ID` with your YouTube video ID
+- **Add a project, paper, or anything else:** copy one `<li>…</li>` block inside that section's list in `index.html`, then change the title, the small label (`item-meta`) and the link.
+- **Items without a link** (Work, Community) use `<li class="item">` with no `<a>`.
+- **Add a whole new section:** copy a `<section class="card">…</section>` block and give it a new `id`. Add a matching nav link: `<a href="#yourid" data-go="yourid">Name</a>`. The dots and arrows update automatically.
+- **Colours:** change the variables at the top of `css/styles.css`. `--hl` is the highlighter yellow. There is a separate dark-mode block right below it.
 
-### Add Your Resume
-- Place your resume PDF in `/public/resume.pdf`
+## How it behaves
 
-### Update Content
-- **Experience bullets**: `src/components/Experience.js` → look for `// REPLACE` comments
-- **Project descriptions**: `src/components/Projects.js` → look for `REPLACE` text
-- **About text**: `src/components/About.js` → look for `// REPLACE` comments
+- **Desktop:** one card in the centre, with the next card peeking in from the right. Navigation is in the top bar.
+- **Tablet and phone:** the top bar becomes progress dots, and each section fills the screen. Swipe left or right to move.
+- **Keyboard:** ← and → move between sections. Home and End jump to the first and last.
+- **Direct links:** `yoursite.com/#projects` opens straight on Projects.
+- **Dark mode:** follows the visitor's system setting.
+- **No JavaScript:** everything shows as one normal scrolling page.
 
-## 🎨 Colors
-- Primary: `#e11d48` (red)
-- Secondary: `#ec4899` (pink)
-- Accent: `#fce7f3` (light pink)
-- Background: `#fff9f9` (cream)
+## Deploy to Netlify (replaces your current site)
 
-To change colors, update `tailwind.config.js` and the CSS variables in `src/app/globals.css`
+1. Go to app.netlify.com → your existing site (guttalpooja) → **Deploys**.
+2. Drag the whole `pooja-portfolio` folder onto the deploy area.
+3. The same address, guttalpooja.netlify.app, now shows the new site.

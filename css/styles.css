@@ -1,0 +1,825 @@
+/* =========================================================
+   Pooja Guttal — portfolio
+   Paper, ink, and one highlighter.
+   ========================================================= */
+
+:root {
+  --bg: #F5F6F3;          /* paper */
+  --surface: #F5F6F3;     /* active card */
+  --surface-2: #FFFFFF;   /* peeking cards, email box */
+  --ink: #18202E;
+  --ink-hover: #3A4A66;
+  --slate: #5B6577;
+  --rule: #DCDFE3;
+  --hl: #F4C542;          /* highlighter */
+  --hl-alpha: 0.92;
+  --shadow: 0 18px 50px rgba(24, 32, 46, 0.10);
+
+  --display: 'Bricolage Grotesque', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gutter: clamp(16px, 4.5vw, 64px);
+  --card-w: min(780px, calc(100vw - 2 * var(--gutter)));
+  --card-gap: clamp(48px, 7vw, 110px);
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121824;
+    --surface: #161D2B;
+    --surface-2: #1B2333;
+    --ink: #E9ECF1;
+    --ink-hover: #FFFFFF;
+    --slate: #9AA4B5;
+    --rule: #2B3446;
+    --hl: #C7982A;
+    --hl-alpha: 0.75;
+    --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121824;
+  --surface: #161D2B;
+  --surface-2: #1B2333;
+  --ink: #E9ECF1;
+  --ink-hover: #FFFFFF;
+  --slate: #9AA4B5;
+  --rule: #2B3446;
+  --hl: #C7982A;
+  --hl-alpha: 0.75;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--ink); }
+a:hover { color: var(--ink-hover); }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: calc(env(safe-area-inset-top, 0px) + clamp(20px, 3vw, 34px)) var(--gutter) clamp(12px, 2vw, 20px);
+}
+
+.brand {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(17px, 1.6vw, 22px);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(20px, 2.6vw, 36px);
+}
+
+.nav a {
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  color: var(--slate);
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav a:hover { color: var(--ink); }
+.nav a[aria-current="true"] {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom-color: var(--ink);
+}
+
+/* ---------- highlighter ---------- */
+.mark {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding: 0 0.1em;
+}
+
+.brush {
+  position: absolute;
+  left: -0.14em;
+  top: 36%;
+  width: calc(100% + 0.36em);
+  height: 64%;
+  z-index: -1;
+  fill: var(--hl);
+  fill-opacity: var(--hl-alpha);
+  transform: rotate(-1.6deg);
+  pointer-events: none;
+}
+
+/* The stroke sweeps in from the left each time a card opens */
+.js .brush {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s var(--ease) 0.25s;
+}
+.js .is-active .brush {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ---------- deck ---------- */
+.deck {
+  position: relative;
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  padding: 24px var(--gutter) 64px;
+}
+
+.card {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* JS on: one card at a time, next one peeking on wide screens */
+.js body {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.js .deck {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  touch-action: pan-y;
+}
+
+.js .track {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--card-gap);
+  padding: 0;
+  height: 100%;
+  transition: transform 0.6s var(--ease);
+  will-change: transform;
+}
+.js .track.no-anim { transition: none; }
+
+.js .card {
+  flex: 0 0 var(--card-w);
+  width: var(--card-w);
+  max-width: none;
+  margin: 0;
+  max-height: calc(100% - 16px);
+  overflow-y: auto;
+  --pad-b: clamp(28px, 3.4vw, 44px);
+  padding: clamp(32px, 4vw, 52px) clamp(28px, 4.2vw, 58px) var(--pad-b);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(22px, 2.6vw, 32px);
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  opacity: 0.4;
+  transform: scale(0.97);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease), background-color 0.5s;
+  cursor: pointer;
+}
+
+/* "Scroll for more": fades the bottom of a card that has more below.
+   JS adds .has-more only while there is hidden content left to scroll to. */
+.js .card { --card-bg: var(--surface); position: relative; }
+.js .card::after {
+  content: "\2193\00a0\00a0Scroll for more";
+  /* floats over the card's bottom edge; JS keeps it there while the card scrolls (--st) */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  transform: translateY(var(--st, 0px));
+  border-radius: 0 0 inherit inherit;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 14px;
+  box-sizing: border-box;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  background: linear-gradient(to bottom, transparent, var(--card-bg) 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.js .card.is-active.has-more::after { opacity: 1; }
+
+/* opening a section from a link focuses it; no ring around the whole card */
+.js .card:focus { outline: none; }
+
+.js .card.is-active {
+  opacity: 1;
+  transform: none;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  cursor: auto;
+}
+
+/* On the first slide, hide the next card peeking in */
+.js .deck.at-start .card:not(.is-active) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Hello is bare type, no card */
+.js .card--hello,
+.js .card--hello.is-active {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- profile photo ---------- */
+.avatar {
+  position: relative;
+  isolation: isolate;
+  width: clamp(88px, 9vw, 120px);
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+/* yellow highlighter disc peeking out behind the photo */
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--hl);
+  opacity: var(--hl-alpha);
+  transform: translate(9%, 7%) scale(1.04);
+}
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ---------- type ---------- */
+.hello-name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  /* one line, sized to fit the card width */
+  font-size: clamp(40px, calc(var(--card-w) / 6.4), 120px);
+  white-space: nowrap;
+  text-align: center;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.hint {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.no-js .hint { display: none; }
+
+.card-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(42px, 4.4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+/* ---------- lists ---------- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: clamp(14px, 1.6vw, 18px) 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+}
+.list li:not(.item) { border-bottom: 1px solid var(--rule); }
+.list li > .item { border-bottom: 0; }
+
+.item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.item-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(19px, 1.8vw, 24px);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.item-desc {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--slate);
+}
+
+.item-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.item-arrow {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: clamp(16px, 1.5vw, 20px);
+  color: var(--slate);
+  transition: transform 0.25s var(--ease), color 0.2s;
+}
+
+a.item:hover .item-arrow {
+  color: var(--ink);
+  transform: translate(3px, -3px);
+}
+
+/* ---------- project tiles ---------- */
+/* Projects gets a wider card so six tiles fit without scrolling */
+.js .card--wide {
+  flex-basis: min(1060px, calc(100vw - 2 * var(--gutter)));
+  width: min(1060px, calc(100vw - 2 * var(--gutter)));
+}
+
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 18px);
+}
+.tiles > li { display: flex; }
+
+.tile {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(16px, 1.8vw, 22px);
+  padding-right: 40px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.2s, transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+/* hover: the tile lifts and a yellow block slides out behind it, like the photo's disc */
+.tile:hover,
+.tile:focus-visible {
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--hl);
+}
+
+.tile-tag {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--hl) 38%, transparent);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transform: rotate(-1deg);
+}
+
+.tile-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.tile-desc {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--slate);
+}
+
+.tile-arrow {
+  position: absolute;
+  top: clamp(16px, 1.8vw, 22px);
+  right: 16px;
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--slate);
+  transition: transform 0.25s var(--ease), color 0.2s;
+}
+.tile:hover .tile-arrow {
+  color: var(--ink);
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 900px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .tiles { gap: 8px; }
+  .tile { padding: 12px 28px 12px 12px; gap: 5px; border-radius: 10px; }
+  .tile-tag { font-size: 9px; padding: 2px 6px; }
+  .tile-title { font-size: 15px; }
+  .tile-desc { font-size: 13px; line-height: 1.35; }
+  .tile-arrow { top: 14px; right: 12px; font-size: 14px; }
+}
+
+/* ---------- research ---------- */
+.tile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* a tile with its own links inside (paper + demo); hovers like the others */
+.tile--static { padding-right: clamp(16px, 1.8vw, 22px); }
+.tile--static:hover,
+.tile--static:focus-within {
+  border-color: var(--ink);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--hl);
+}
+
+.tile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--ink);
+  border-radius: 15px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background-color 0.2s, color 0.2s;
+}
+.pill:hover,
+.pill:focus-visible {
+  background: var(--hl);
+  color: #18202E;   /* dark text on yellow, in light and dark mode */
+}
+
+/* only three papers: stacked one below another */
+.tiles--3 { grid-template-columns: minmax(0, 1fr); }
+
+@media (max-width: 560px) {
+  .pill { height: 26px; padding: 0 10px; font-size: 9px; }
+}
+
+/* ---------- work timeline ---------- */
+.timeline {
+  --logo: 56px;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.6vw, 30px);
+}
+
+/* one continuous line running through every logo */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--logo) / 2 - 1px);
+  top: calc(var(--logo) / 2);
+  bottom: calc(var(--logo) / 2);
+  width: 2px;
+  background: var(--rule);
+}
+
+.tl-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 26px);
+}
+
+.tl-logo {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 var(--logo);
+  width: var(--logo);
+  height: var(--logo);
+  border-radius: 50%;
+  background: #FFFFFF;   /* logos are made for light backgrounds, even in dark mode */
+  border: 1px solid var(--rule);
+  box-shadow: 0 4px 12px rgba(24, 32, 46, 0.10);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.tl-logo img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+/* logos with lots of empty space around them get to fill more of the circle */
+.tl-logo--fill img { width: 86%; height: 86%; }
+
+/* round badge-style logos fill the whole circle */
+.tl-logo--full img { width: 100%; height: 100%; object-fit: cover; }
+
+.tl-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 24px;
+}
+
+.tl-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tl-role {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.tl-org {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--slate);
+}
+
+.tl-date {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+/* phones: date drops under the company name */
+@media (max-width: 560px) {
+  .timeline { --logo: 48px; }
+  .tl-body { flex-direction: column; gap: 4px; }
+  .tl-date { font-size: 11px; }
+}
+
+/* ---------- connect ---------- */
+.contacts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 18px);
+}
+.contacts > li { display: flex; }
+
+.contact {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+.contact .tl-logo {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  box-shadow: none;
+}
+.contact .tl-logo img { width: 50%; height: 50%; }
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-handle {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--slate);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+  .contacts { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+}
+
+.footnote {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--slate);
+}
+
+/* ---------- controls ---------- */
+.controls {
+  display: none;
+}
+
+.js .controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: var(--card-w);
+  margin: 0 auto;
+  padding: clamp(14px, 2.4vw, 28px) 0 calc(env(safe-area-inset-bottom, 0px) + clamp(18px, 3vw, 36px));
+}
+
+.controls-middle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.round {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.round svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.round--ghost { border: 1.5px solid var(--ink); background: transparent; color: var(--ink); }
+.round--solid { border: 0; background: var(--ink); color: var(--bg); }
+.round:hover { transform: translateY(-1px); }
+.round:disabled { opacity: 0.25; cursor: default; transform: none; }
+
+.dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: var(--rule);
+  transition: width 0.35s var(--ease), background-color 0.35s;
+}
+.dot.is-past { background: var(--slate); }
+.dot.is-current { width: 22px; background: var(--ink); }
+
+.counter {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  font-variant-numeric: tabular-nums;
+}
+
+.dots--top { display: none; }
+
+/* ---------- tablet & phone ---------- */
+@media (max-width: 820px) {
+  .nav { display: none; }
+  .js .dots--top { display: flex; }
+  .dots--bottom { display: none; }
+}
+
+@media (max-width: 560px) {
+  :root { --card-gap: 40px; }
+
+  .js .deck { align-items: flex-start; }
+
+  /* On phones each section is the whole screen, no card frame */
+  .js .card,
+  .js .card.is-active {
+    --pad-b: 12px;
+    padding: 8px 0 var(--pad-b);
+    border-radius: 0;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+    max-height: 100%;
+  }
+  .js .card { opacity: 0; --card-bg: var(--bg); }
+  .js .card.is-active { opacity: 1; }
+  .js .card--hello { justify-content: center; height: 100%; }
+}
+
+/* ---------- short laptop screens: tighten so cards fit without scrolling ---------- */
+@media (min-width: 561px) and (max-height: 780px) {
+  .topbar { padding-top: 16px; padding-bottom: 8px; }
+  .js .controls { padding-top: 10px; padding-bottom: 14px; }
+  .js .card {
+    --pad-b: 24px;
+    padding-top: 26px;
+    gap: 18px;
+  }
+  .card-title { font-size: clamp(34px, 3.4vw, 44px); }
+  .tile { padding: 14px 36px 14px 16px; gap: 6px; }
+  .tile-arrow { top: 14px; }
+  .timeline { gap: 16px; }
+}
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

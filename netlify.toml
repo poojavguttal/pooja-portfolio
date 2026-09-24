@@ -1,0 +1,4 @@
+# Plain HTML, CSS and JavaScript: no build step, serve the folder as is.
+[build]
+  publish = "."
+  command = "echo 'Static site, nothing to build'"
