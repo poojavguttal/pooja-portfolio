@@ -2,3 +2,8 @@
 [build]
   publish = "."
   command = "echo 'Static site, nothing to build'"
+
+# This project used to be a Next.js app, so Netlify still runs its Next.js
+# plugin. There's no Next.js here any more: tell the plugin to skip itself.
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
